@@ -1,5 +1,5 @@
 """Console script for proyectoadaii."""
-import proyectoadaii
+import src.proyectoadaii.subsecuencias as subsecuencias
 
 import typer
 from rich.console import Console
