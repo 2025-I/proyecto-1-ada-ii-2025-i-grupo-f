@@ -28,10 +28,6 @@ jobs:
 
     - name: Lint with flake8
       run: |
-        conda run -n myenv flake8 src/ tests/
-        
-    - name: Lint with flake8
-      run: |
         conda run -n myenv flake8 src/ tests/ --ignore=W391,W292,F401,E302,E712
 
     - name: Run tests with pytest
