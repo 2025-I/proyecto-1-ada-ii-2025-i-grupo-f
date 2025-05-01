@@ -17,6 +17,10 @@ jobs:
         auto-update-conda: true  # Actualiza Conda automáticamente
         envs-dir: ${{ github.workspace }}/conda  # Establecer un directorio para los entornos Conda
 
+    - name: Initialize Conda
+      run: |
+        conda init bash  # Inicializa Conda en el shell bash
+
     - name: Create and activate Conda environment
       run: |
         conda env create --file environment.yml  # Crea el entorno Conda desde el archivo environment.yml
@@ -34,4 +38,5 @@ jobs:
     - name: Test with pytest
       run: |
         pytest  # Ejecutar las pruebas usando pytest
+
 
