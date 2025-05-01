@@ -34,7 +34,7 @@ jobs:
       env:
         PYTHONPATH: src
       run: |
-        conda run -n myenv pytest test/
+        conda run -n myenv pytest tests/
 
 
 
