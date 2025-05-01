@@ -26,9 +26,9 @@ jobs:
         conda run -n myenv python -m py_compile src/fiesta.py
         conda run -n myenv python -m py_compile src/subsecuencias.py
 
-    - name: Lint with flake8
-      run: |
-        conda run -n myenv flake8 src/ test/
+    name: Lint with flake8
+    run: |
+    conda run -n myenv flake8 src/ tests/
 
     - name: Run tests with pytest
       env:
