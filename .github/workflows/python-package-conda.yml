@@ -5,38 +5,30 @@ on: [push]
 jobs:
   build-linux:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 5
 
     steps:
-    - uses: actions/checkout@v2  # Usamos la versión 2 de checkout
+    - uses: actions/checkout@v2
+
     - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v2  # Usamos esta acción para instalar Conda
+      uses: conda-incubator/setup-miniconda@v2
       with:
-        python-version: '3.10'  # Establece la versión de Python que quieres usar
-        auto-update-conda: true  # Actualiza Conda automáticamente
-        envs-dir: ${{ github.workspace }}/conda  # Establecer un directorio para los entornos Conda
+        python-version: 3.8
+        auto-update-conda: true
+        activate-environment: myenv
+        environment-file: environment.yml
 
-    - name: Initialize Conda
+    - name: Install additional dependencies
       run: |
-        conda init bash  # Inicializa Conda en el shell bash
-
-    - name: Create and activate Conda environment
-      run: |
-        conda env create --file environment.yml  # Crea el entorno Conda desde el archivo environment.yml
-        conda activate myenv  # Asegúrate de que el entorno en environment.yml sea "myenv" o el que hayas definido
-
-    - name: Install dependencies with Conda
-      run: |
-        conda install pytest flake8  # Instalar pytest y flake8 dentro del entorno Conda si no están en environment.yml
+        conda install -n myenv flake8 pytest
 
     - name: Lint with flake8
       run: |
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        conda run -n myenv flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        conda run -n myenv flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Test with pytest
       run: |
-        pytest  # Ejecutar las pruebas usando pytest
+        conda run -n myenv pytest
+
 
 
