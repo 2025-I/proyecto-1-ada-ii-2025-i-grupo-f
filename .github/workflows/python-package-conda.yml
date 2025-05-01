@@ -39,21 +39,9 @@ jobs:
         conda run -n myenv pytest tests/
         if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; echo "test_fiesta: correcto"; echo "test_subsecuencias: correcto"; else echo "Errores en las pruebas"; fi
 
-    - name: Set up SonarQube
-      uses: SonarSource/sonarcloud-github-action@v1
-      with:
-        sonar_token: ${{ secrets.SONAR_TOKEN }}
-        organization: 'your-org-name'  # Reemplázalo con el nombre de tu organización en SonarQube o SonarCloud
-        projectKey: 'your-project-key'  # Reemplázalo con tu clave de proyecto
-        projectName: 'your-project-name'  # Reemplázalo con el nombre de tu proyecto
 
-    - name: Run SonarQube analysis
-      run: |
-        conda run -n myenv sonar-scanner \
-          -Dsonar.projectKey=your-project-key \
-          -Dsonar.sources=src \
-          -Dsonar.tests=tests \
-          -Dsonar.python.version=3.8
+
+
 
 
 
