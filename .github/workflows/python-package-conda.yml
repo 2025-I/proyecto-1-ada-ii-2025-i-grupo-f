@@ -25,16 +25,20 @@ jobs:
       run: |
         conda run -n myenv python -m py_compile src/fiesta.py
         conda run -n myenv python -m py_compile src/subsecuencias.py
+        if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; else echo "Errores en la compilación"; fi
 
     - name: Lint with flake8
       run: |
         conda run -n myenv flake8 src/ tests/ --ignore=W391,W292,F401,E302,E712
+        if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; echo "test_fiesta: correcto"; echo "test_subsecuencias: correcto"; else echo "Errores de linting"; fi
 
     - name: Run tests with pytest
       env:
         PYTHONPATH: src
       run: |
         conda run -n myenv pytest tests/
+        if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; echo "test_fiesta: correcto"; echo "test_subsecuencias: correcto"; else echo "Errores en las pruebas"; fi
+
 
 
 
