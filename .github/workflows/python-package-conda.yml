@@ -9,26 +9,29 @@ jobs:
       max-parallel: 5
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
+    - uses: actions/checkout@v2  # Usamos la versión 2 de checkout
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v2  # Usamos esta acción para instalar Conda
       with:
-        python-version: '3.10'
-    - name: Add conda to system path
+        python-version: '3.10'  # Establece la versión de Python que quieres usar
+        auto-update-conda: true  # Actualiza Conda automáticamente
+        envs-dir: ${{ github.workspace }}/conda  # Establecer un directorio para los entornos Conda
+
+    - name: Create and activate Conda environment
       run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
-    - name: Install dependencies
+        conda env create --file environment.yml  # Crea el entorno Conda desde el archivo environment.yml
+        conda activate myenv  # Asegúrate de que el entorno en environment.yml sea "myenv" o el que hayas definido
+
+    - name: Install dependencies with Conda
       run: |
-        conda env update --file environment.yml --name base
+        conda install pytest flake8  # Instalar pytest y flake8 dentro del entorno Conda si no están en environment.yml
+
     - name: Lint with flake8
       run: |
-        conda install flake8
-        # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
     - name: Test with pytest
       run: |
-        conda install pytest
-        pytest
+        pytest  # Ejecutar las pruebas usando pytest
+
