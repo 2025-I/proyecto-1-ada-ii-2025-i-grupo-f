@@ -1,68 +1,35 @@
-from typing import List, Tuple, Dict
+from itertools import combinations
 
-def resolver_fiesta(m: int, matriz: List[List[int]], calificaciones: List[int]) -> Tuple[List[int], int]:
-    # Paso 1: Construir grafo de supervisión
-    hijos: Dict[int, List[int]] = {i: [] for i in range(m)}
-    tiene_padre = [False] * m
+def leer_entrada(lines):
+    n = int(lines[0])
+    matriz = [list(map(int, lines[i + 1].split())) for i in range(n)]
+    convivencias = list(map(int, lines[n + 1].split()))
+    return n, matriz, convivencias
 
-    for i in range(m):
-        for j in range(m):
-            if matriz[i][j] == 1:
-                hijos[i].append(j)
-                tiene_padre[j] = True
+def es_valido(subconjunto, matriz):
+    for i in subconjunto:
+        if matriz[i][i] == 1:
+            return False  # No puede supervisarse a sí mismo
+        for j in subconjunto:
+            if i != j and matriz[i][j] == 1:
+                return False  # No puede supervisar a otro invitado
+    return True
 
-    # Paso 2: Encontrar raíces
-    raices = [i for i in range(m) if not tiene_padre[i]]
-    if not raices:
-        raices = list(range(m))  # por si todo es un ciclo
+def resolver_fiesta_general(matriz, convivencias):
+    n = len(matriz)
+    mejor_suma = 0
+    mejor_subconjunto = []
 
-    memo = {}
+    for r in range(1, n + 1):
+        for subconjunto in combinations(range(n), r):
+            if es_valido(subconjunto, matriz):
+                suma = sum(convivencias[i] for i in subconjunto)
+                if suma > mejor_suma:
+                    mejor_suma = suma
+                    mejor_subconjunto = list(subconjunto)
 
-    # Paso 3: DP con prevención de ciclos
-    def dp(nodo: int, visitados: set) -> Tuple[int, int]:
-        if nodo in visitados:
-            return (0, 0)
+    invitados = [0] * n
+    for i in mejor_subconjunto:
+        invitados[i] = 1
 
-        if nodo in memo:
-            return memo[nodo]
-
-        visitados.add(nodo)
-        incluir = calificaciones[nodo]
-        excluir = 0
-        for h in hijos[nodo]:
-            inc_h, exc_h = dp(h, visitados.copy())
-            incluir += exc_h
-            excluir += max(inc_h, exc_h)
-        memo[nodo] = (incluir, excluir)
-        return memo[nodo]
-
-    invitados = [0] * m
-
-    # Paso 4: reconstrucción de solución con prevención de ciclos
-    def reconstruir(nodo: int, incluir_padre: bool, visitados: set):
-        if nodo in visitados:
-            return
-        visitados.add(nodo)
-
-        incluir, excluir = memo[nodo]
-        if incluir_padre:
-            invitados[nodo] = 0
-            for h in hijos[nodo]:
-                reconstruir(h, False, visitados)
-        else:
-            if incluir > excluir:
-                invitados[nodo] = 1
-                for h in hijos[nodo]:
-                    reconstruir(h, True, visitados)
-            else:
-                invitados[nodo] = 0
-                for h in hijos[nodo]:
-                    reconstruir(h, False, visitados)
-
-    # Aplicar DP y reconstrucción para cada raíz
-    for r in raices:
-        dp(r, set())
-        reconstruir(r, False, set())
-
-    total = sum(calificaciones[i] for i in range(m) if invitados[i] == 1)
-    return invitados, total
+    return invitados, mejor_suma
