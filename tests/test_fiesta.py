@@ -1,10 +1,38 @@
 import unittest
-from src.fiesta import resolver_fiesta_voraz, resolver_fiesta
+from src.fiesta.fuerza_bruta import resolver_fiesta_fuerza_bruta
+from src.fiesta.voraz import resolver_fiesta_voraz
+from src.fiesta.resolver import resolver_fiesta
 
 class TestFiesta(unittest.TestCase):
-
-    # --- GRAFOS DIRIGIDOS CON CICLOS (estrategia voraz) ---
+     # --- GRAFOS DIRIGIDOS CON CICLOS (estrategia fuerza bruta) ---
     def test_01_ejemplo_con_ciclo(self):
+        matriz = [
+            [0, 1, 0, 0, 0],  # A → B
+            [0, 0, 1, 0, 0],  # B → C
+            [0, 0, 0, 1, 0],  # C → D
+            [0, 0, 0, 0, 1],  # D → E
+            [1, 0, 0, 0, 0],  # E → A (ciclo cerrado)
+        ]
+        convivencias = [10, 30, 15, 5, 8]
+        invitados, suma = resolver_fiesta_fuerza_bruta(matriz, convivencias)
+        self.assertEqual(invitados, [0, 1, 0, 0, 1])
+        self.assertEqual(suma, 38)
+
+    def test_02_caso_con_6_empleados_y_ciclos(self):
+        matriz = [
+            [0, 0, 1, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0]
+        ]
+        convivencias = [12, 21, 5, 10, 8, 7]
+        invitados, suma = resolver_fiesta_fuerza_bruta(matriz, convivencias)
+        self.assertEqual(invitados, [0, 1, 0, 0, 1, 0])
+        self.assertEqual(suma, 29)
+    # --- GRAFOS DIRIGIDOS CON CICLOS (estrategia voraz) ---
+    def test_03_ejemplo_con_ciclo(self):
         matriz = [
             [0, 1, 0, 0, 0],  # A → B
             [0, 0, 1, 0, 0],  # B → C
@@ -17,7 +45,7 @@ class TestFiesta(unittest.TestCase):
         self.assertEqual(invitados, [0, 1, 0, 0, 1])
         self.assertEqual(suma, 38)
 
-    def test_02_caso_con_6_empleados_y_ciclos(self):
+    def test_04_caso_con_6_empleados_y_ciclos(self):
         matriz = [
             [0, 0, 1, 0, 0, 0],
             [1, 0, 0, 0, 0, 0],
@@ -32,7 +60,7 @@ class TestFiesta(unittest.TestCase):
         self.assertEqual(suma, 29)
 
     # --- ÁRBOLES (detección automática y DP) ---
-    def test_03_arbol_5_empleados(self):
+    def test_05_arbol_5_empleados(self):
         matriz = [
             [0, 1, 0, 0, 0],  # 0 supervisa a 1
             [0, 0, 1, 0, 0],  # 1 supervisa a 2
@@ -45,7 +73,7 @@ class TestFiesta(unittest.TestCase):
         self.assertEqual(suma, 38)
         self._verificar_restricciones(matriz, invitados)
 
-    def test_04_arbol_6_empleados(self):
+    def test_06_arbol_6_empleados(self):
         matriz = [
             [0, 1, 1, 0, 0, 0],  # 0 supervisa a 1 y 2
             [0, 0, 0, 1, 0, 0],  # 1 supervisa a 3
@@ -60,7 +88,7 @@ class TestFiesta(unittest.TestCase):
         self._verificar_restricciones(matriz, invitados)
 
     # --- Caso con autorreferencia ---
-    def test_05_empleado_se_supervisa_a_si_mismo(self):
+    def test_07_empleado_se_supervisa_a_si_mismo(self):
         matriz = [
             [1, 1, 0],  # 0 se supervisa y supervisa a 1
             [0, 0, 1],  # 1 supervisa a 2
