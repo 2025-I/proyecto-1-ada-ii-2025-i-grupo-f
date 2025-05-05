@@ -1,36 +1,26 @@
-# --- Método Voraz para grafos generales (ciclos permitidos) ---
+# --- VORAZ ---
+# Algoritmo voraz para resolver el problema de la fiesta
 def resolver_fiesta_voraz(matriz, convivencias):
-    n = len(matriz) #cantidad de empleados 
-    empleados = list(range(n)) #Crea una lista con los índices de todos los empleados: [0, 1, 2, ..., n-1].
-    # Paso 1: Crear listas para registrar supervisiones
-    supervisa = [set() for _ in range(n)]   #  empleados que son supervisados por i
-    supervisado_por = [set() for _ in range(n)] # quién supervisa a j
-    
-    for i in range(n):
-        for j in range(n):
-            if matriz[i][j]==1:
-                supervisa[i].add(j) #Se agrega j al conjunto supervisa[i].
-                supervisado_por[j].add(i) #Se agrega i al conjunto supervisado_por[j].
+    n = len(matriz)
+    empleados = list(range(n))
 
-    # Paso 2: Ordenar empleados por mayor convivencia (descendente)
-    #
-    empleados.sort(key=lambda x: convivencias[x], reverse=True)
-    # Paso 3: Seleccionar invitados evitando conflictos
-    invitados = [0] * n #5 → [0, 0, 0, 0, 0]
-    incompatibles = set() # los que no pueden ser invitados
+    # Ordenar empleados por su convivencia (de mayor a menor)
+    empleados.sort(key=lambda i: convivencias[i], reverse=True)
 
-    for i in empleados: 
-        if i in incompatibles:
-            continue
-        if matriz[i][i] == 1:  # se supervisa a sí mismo
-            continue
-        invitados[i] = 1
+    invitados = []
+    invitados_set = set()
 
-        # Marcar como incompatibles a quienes él supervisa o lo supervisan
-        incompatibles.update(supervisa[i])
-        incompatibles.update(supervisado_por[i])
-        incompatibles.add(i)
-     # Paso 4: Calcular la suma de convivencia de los invitados
-    suma = sum(convivencias[i] for i in range(n) if invitados[i])
+    for i in empleados:
+        puede_invitarse = True
+        for j in invitados_set:
+            if matriz[i][j] == 1 or matriz[j][i] == 1:
+                puede_invitarse = False
+                break
+        if puede_invitarse:
+            invitados.append(i)
+            invitados_set.add(i)
 
-    return invitados, suma
+    # Generar lista de 1s y 0s
+    seleccion = [1 if i in invitados_set else 0 for i in range(n)]
+    suma = sum(convivencias[i] for i in invitados)
+    return seleccion, suma

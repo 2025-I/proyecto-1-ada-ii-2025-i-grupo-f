@@ -1,37 +1,42 @@
 # src/fiesta/dp_arbol.py
-def resolver_fiesta_dp_arbol_adj(adj_list, convivencias, raiz):
-    n = len(adj_list)
-    invalido = [False] * n
-    for i in range(n):
-        if i in adj_list[i]:
-            invalido[i] = True
+
+from .utils import matriz_a_lista_adyacencia, es_arbol_enraizado_adj
+
+def resolver_fiesta_dp_arbol(matriz, convivencias):
+    adj = matriz_a_lista_adyacencia(matriz)
+    es_arbol, raiz = es_arbol_enraizado_adj(adj)
+    if not es_arbol:
+        return [0] * len(matriz), 0
+
+    n = len(matriz)
 
     def dp(v):
-        if invalido[v]:
-            return (0, 0, [], [])
+        incluir = convivencias[v]
+        excluir = 0
+        invitados_incluir = [0] * n
+        invitados_excluir = [0] * n
+        invitados_incluir[v] = 1
 
-        incluir_suma = convivencias[v]
-        excluir_suma = 0
-        incluir_invitados = [v]
-        excluir_invitados = []
+        for hijo in adj[v]:
+            inc, exc, inv_inc, inv_exc = dp(hijo)
 
-        for h in adj_list[v]:
-            inc_h, exc_h, invit_inc, invit_exc = dp(h)
-            incluir_suma += exc_h
-            incluir_invitados += invit_exc
-            if inc_h > exc_h:
-                excluir_suma += inc_h
-                excluir_invitados += invit_inc
+            incluir += exc  # si invito a v, no puedo invitar a hijos
+            for i in range(n):
+                invitados_incluir[i] += inv_exc[i]
+
+            if inc > exc:
+                excluir += inc
+                for i in range(n):
+                    invitados_excluir[i] += inv_inc[i]
             else:
-                excluir_suma += exc_h
-                excluir_invitados += invit_exc
+                excluir += exc
+                for i in range(n):
+                    invitados_excluir[i] += inv_exc[i]
 
-        return incluir_suma, excluir_suma, incluir_invitados, excluir_invitados
+        return incluir, excluir, invitados_incluir, invitados_excluir
 
-    inc, exc, invit_inc, invit_exc = dp(raiz)
-    final_invitados = invit_inc if inc > exc else invit_exc
-    invitados = [0] * n
-    for i in final_invitados:
-        invitados[i] = 1
-    suma = sum(convivencias[i] for i in final_invitados)
-    return invitados, suma
+    incluir, excluir, invitados_incluir, invitados_excluir = dp(raiz)
+    if incluir > excluir:
+        return invitados_incluir, incluir
+    else:
+        return invitados_excluir, excluir

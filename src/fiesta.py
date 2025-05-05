@@ -1,12 +1,19 @@
-# main_fiesta.py
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
 import tkinter as tk
 from tkinter import filedialog
-from fiesta.resolver import resolver_fiesta  # Ajusta si tu función está en otro archivo
+from fiesta.resolver import resolver_fiesta
 
 def leer_entrada_desde_archivo(file_path):
     with open(file_path, "r") as f:
         contenido = f.read().strip().split("\n")
+
+    print(f"\n📂 Archivo abierto: {file_path}")
+    print("🧾 Contenido leído del archivo:")
+    for linea in contenido:
+        print("  ", linea)
 
     idx = 0
     num_problemas = int(contenido[idx])
@@ -14,9 +21,10 @@ def leer_entrada_desde_archivo(file_path):
 
     resultados = []
 
-    for _ in range(num_problemas):
+    for problema_num in range(num_problemas):
         m = int(contenido[idx])
         idx += 1
+        print(f"\n📌 Problema #{problema_num + 1} con {m} empleados (espera {m} filas + 1 línea de convivencias)")
 
         matriz = []
         for _ in range(m):
@@ -27,9 +35,18 @@ def leer_entrada_desde_archivo(file_path):
         convivencias = list(map(int, contenido[idx].split()))
         idx += 1
 
-        invitados, suma = resolver_fiesta(matriz, convivencias)
-        resultado_linea = " ".join(map(str, invitados)) + f" {suma}"
-        resultados.append(resultado_linea)
+        if len(matriz) != m:
+            print(f"⚠️ Advertencia: se esperaban {m} filas pero se leyeron {len(matriz)}")
+        if len(convivencias) != m:
+            print(f"⚠️ Advertencia: se esperaban {m} valores de convivencia pero se leyeron {len(convivencias)}")
+
+        soluciones = resolver_fiesta(matriz, convivencias)
+
+        for metodo, (invitados, suma) in soluciones.items():
+            resultado_linea = f"{metodo.upper()}: " + " ".join(map(str, invitados)) + f" {suma}"
+            resultados.append(resultado_linea)
+
+        resultados.append("")  # Línea vacía entre problemas
 
     return resultados
 

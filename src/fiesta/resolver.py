@@ -1,17 +1,33 @@
+# src/fiesta/resolver_fiesta.py
+
 # src/fiesta/resolver.py
-from .utils import matriz_a_lista_adyacencia, es_arbol_enraizado_adj
+
+from .dp_arbol import resolver_fiesta_dp_arbol
 from .voraz import resolver_fiesta_voraz
-from .dp_arbol import resolver_fiesta_dp_arbol_adj
+from .fuerza_bruta import resolver_fiesta_fuerza_bruta
 
 
 def resolver_fiesta(matriz, convivencias):
-    adj = matriz_a_lista_adyacencia(matriz)
-    es_arbol, raiz = es_arbol_enraizado_adj(adj)
-    if es_arbol:
-        invitados, suma = resolver_fiesta_dp_arbol_adj(adj, convivencias, raiz)
-    else:
-        invitados, suma = resolver_fiesta_voraz(matriz, convivencias)
+    """
+    Ejecuta los tres métodos disponibles:
+    - Programación dinámica en árboles (DP)
+    - Voraz
+    - Fuerza bruta
 
-    print("\U0001F50D Invitados seleccionados:", [i for i, v in enumerate(invitados) if v])
-    print("\U0001F4CA Suma total de convivencia:", suma)
-    return invitados, suma
+    Retorna:
+        dict con los resultados de cada método:
+        {
+            'dp': (lista_binaria, suma),
+            'voraz': (lista_binaria, suma),
+            'fuerza_bruta': (lista_binaria, suma)
+        }
+    """
+    resultado_dp = resolver_fiesta_dp_arbol(matriz, convivencias)
+    resultado_voraz = resolver_fiesta_voraz(matriz, convivencias)
+    resultado_fb = resolver_fiesta_fuerza_bruta(matriz, convivencias)
+
+    return {
+        'dp': resultado_dp,
+        'voraz': resultado_voraz,
+        'fuerza_bruta': resultado_fb
+    }
