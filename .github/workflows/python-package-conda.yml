@@ -27,9 +27,9 @@ jobs:
         conda run -n myenv python -m py_compile src/subsecuencias.py
         if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; else echo "Errores en la compilación"; fi
 
-        - name: Lint with flake8 (non-blocking, filtered)
-        continue-on-error: true
-        run: |
+    - name: Lint with flake8 (non-blocking, filtered)
+      continue-on-error: true
+      run: |
         echo "Ejecutando flake8..."
         ERRORS=$(conda run -n myenv flake8 src/ tests/ \
           --ignore=W391,W292,F401,E302,E712,E501,E261,E262,E305,E301,E114,E117,W291,W293,E225 \
