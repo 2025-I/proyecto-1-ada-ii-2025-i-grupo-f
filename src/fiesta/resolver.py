@@ -5,7 +5,6 @@
 from .dp_arbol import resolver_fiesta_dp_arbol
 from .voraz import resolver_fiesta_voraz
 from .fuerza_bruta import resolver_fiesta_fuerza_bruta
-#from .utils import matriz_a_lista_adyacencia, es_arbol_enraizado_adj
 from time import perf_counter
 
 def resolver_fiesta(matriz, convivencias):
@@ -43,7 +42,7 @@ def resolver_fiesta(matriz, convivencias):
     resultado_fb = resolver_fiesta_fuerza_bruta(matriz, convivencias)
     end_fb = perf_counter()
      # Mostrar tiempos
-    print(f"\n⏱ TIEMPOS DE EJECUCIÓN")
+    print("\n⏱ TIEMPOS DE EJECUCIÓN")
     print(f"DP:           {end_dp - start_dp:.6f} s")
     print(f"Voraz:        {end_vz - start_vz:.6f} s")
     print(f"Fuerza bruta: {end_fb - start_fb:.6f} s")

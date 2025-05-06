@@ -17,7 +17,6 @@ def es_arbol_enraizado_adj(adj_list):
     n = len(adj_list)
     in_degree = [0] * n
 
-    # print("\n🔍 Validando árbol enraizado...")
     # print("Adj list recibida:", adj_list)
 
     for i in range(n):
