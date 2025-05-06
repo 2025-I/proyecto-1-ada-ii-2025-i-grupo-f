@@ -62,7 +62,7 @@ jobs:
       uses: SonarSource/sonarcloud-github-action@v2
       with:
         args: >
-          -Dsonar.projectKey=proyecto-1-ada-ii-2025-i-grupo-f
+          -Dsonar.projectKey=2025-I_proyecto-1-ada-ii-2025-i-grupo-f
           -Dsonar.organization=2025-I
           -Dsonar.sources=src
           -Dsonar.tests=tests
