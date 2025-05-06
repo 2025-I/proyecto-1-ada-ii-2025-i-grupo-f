@@ -1,8 +1,50 @@
-# tests/test_subsecuencias.py
-import pytest
-from src.subsecuencias import encontrar_subsecuencia
+import unittest
+import time
+import os
+import sys
 
-def test_encontrar_subsecuencia():
-    assert encontrar_subsecuencia([1, 2, 3], [1, 2]) == True
-    assert encontrar_subsecuencia([1, 2, 3], [2, 3]) == True
-    assert encontrar_subsecuencia([1, 2, 3], [3, 4]) == False
+# Agrega la carpeta src al path para poder importar subsecuencias
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+
+from subsecuencias import normalizar, subsecuencia_palindromica_mas_larga
+
+class TestPalindromosJuguete(unittest.TestCase):
+
+    def setUp(self):
+        # Ruta relativa al archivo de entrada
+        ruta_archivo = os.path.join(os.path.dirname(__file__), '..', 'subsecuencias.txt')
+
+        with open(ruta_archivo, 'r', encoding='utf-8') as f:
+            lineas = f.readlines()
+
+        self.cantidad = int(lineas[0].strip())
+        self.entradas = [linea.strip() for linea in lineas[1:self.cantidad + 1]]
+
+        # Resultados esperados (deben coincidir con las entradas del archivo)
+        self.esperados = [
+            "anitalavalatina",
+            "dabalearrozalazorraelabad",
+        
+        ]
+
+    def test_palindromos_juguete(self):
+        repeticiones = 5
+        tiempos = []
+
+        for _ in range(repeticiones):
+            inicio = time.time()
+
+            for i in range(self.cantidad):
+                normalizada = normalizar(self.entradas[i])
+                resultado = subsecuencia_palindromica_mas_larga(normalizada)
+                self.assertEqual(resultado, self.esperados[i])
+
+            fin = time.time()
+            tiempos.append(fin - inicio)
+
+        tiempo_promedio = sum(tiempos) / repeticiones
+        print(f"\n[PRUEBA JUGUETE] Tiempo promedio en {repeticiones} repeticiones: {tiempo_promedio:.5f} segundos")
+
+if __name__ == '__main__':
+    unittest.main()
+

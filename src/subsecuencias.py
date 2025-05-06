@@ -8,9 +8,11 @@ from tkinter.filedialog import askopenfilename
 # Convierte todos los caracteres a minúsculas
 # y elimina cualquier carácter no alfanumérico.
 # ------------------------------------------
-def normalizar(cadena):
-    # re.findall busca todas las letras a-z o dígitos 0-9
-    return ''.join(re.findall(r'[a-z0-9]', cadena.lower()))
+def normalizar(s):
+    # Elimina todos los caracteres que no sean letras o números
+    s = re.sub(r'[^a-zA-Z0-9]', '', s)
+    # Convierte todo a minúsculas
+    return s.lower()
 
 # ----------------------------------------------------------------
 # Función para encontrar la subsecuencia palindrómica más larga.
@@ -42,10 +44,12 @@ def subsecuencia_palindromica_mas_larga(s):
                     dp[i][j] = s[i] + dp[i + 1][j - 1] + s[j]
             else:
                 # Si los extremos no coinciden, elegimos la subsecuencia más larga entre dos posibilidades
-                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1], key=len)
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1], key=lambda x: (len(x), x))
     
     # La solución completa está en dp[0][n-1]
+    # Verifica que se haya generado el palíndromo correcto
     return dp[0][n - 1]
+
 
 # -----------------------------------------------------
 # Función principal que gestiona la lectura de archivo,
