@@ -56,7 +56,14 @@ jobs:
         PYTHONPATH: src
       run: |
         conda run -n myenv pytest --cov=src --cov-report=xml tests/
-        if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; echo "test_fiesta: correcto"; echo "test_subsecuencias: correcto"; else echo "Errores en las pruebas"; fi
+        if [ $? -eq 0 ]; then
+          echo "fiesta: correcto"
+          echo "subsecuencias: correcto"
+          echo "test_fiesta: correcto"
+          echo "test_subsecuencias: correcto"
+        else
+          echo "Errores en las pruebas"
+        fi
         ls -l coverage.xml
 
     - name: SonarCloud Scan
@@ -72,6 +79,7 @@ jobs:
           -Dsonar.verbose=true
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
