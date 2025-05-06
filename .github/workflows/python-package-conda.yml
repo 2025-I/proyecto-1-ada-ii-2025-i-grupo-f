@@ -63,7 +63,7 @@ jobs:
       with:
         args: >
           -Dsonar.projectKey=2025-I_proyecto-1-ada-ii-2025-i-grupo-f
-          -Dsonar.organization=2025-I
+          -Dsonar.organization=2025-i
           -Dsonar.sources=src
           -Dsonar.tests=tests
           -Dsonar.python.version=3.8
