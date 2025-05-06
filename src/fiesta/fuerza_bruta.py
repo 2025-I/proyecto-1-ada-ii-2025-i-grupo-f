@@ -21,6 +21,7 @@ def resolver_fiesta_fuerza_bruta(matriz, convivencias):
                 suma = sum(convivencias[i] for i in subconjunto)
                 if suma > mejor_suma:
                     mejor_suma = suma
-                    mejor_inv = [1 if i in subconjunto else 0 for i in range(n)]
+                    subconjunto_set = set(subconjunto)
+                    mejor_inv = [1 if i in subconjunto_set else 0 for i in range(n)]
 
     return mejor_inv , mejor_suma

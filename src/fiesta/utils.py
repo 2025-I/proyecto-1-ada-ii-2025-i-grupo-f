@@ -17,40 +17,40 @@ def es_arbol_enraizado_adj(adj_list):
     n = len(adj_list)
     in_degree = [0] * n
 
-    print("\n🔍 Validando árbol enraizado...")
-    print("Adj list recibida:", adj_list)
+    # print("\n🔍 Validando árbol enraizado...")
+    # print("Adj list recibida:", adj_list)
 
     for i in range(n):
         for j in adj_list[i]:
             in_degree[j] += 1
 
-    print("In-degree:", in_degree)
+    # print("In-degree:", in_degree)
 
     raices = [i for i, grado in enumerate(in_degree) if grado == 0]
-    print("Raíces encontradas:", raices)
+    # print("Raíces encontradas:", raices)
 
     if len(raices) != 1:
-        print("❌ Árbol inválido: múltiples o ninguna raíz")
+        # print("❌ Árbol inválido: múltiples o ninguna raíz")
         return False, None
 
     raiz = raices[0]
 
-    visitado = [False] * n
+    # Usamos un set para marcar nodos visitados (más eficiente que lista booleana)
+    visitado = set()
 
     def dfs(v):
-        visitado[v] = True
+        visitado.add(v)
         for u in adj_list[v]:
-            if not visitado[u]:
+            if u not in visitado:
                 dfs(u)
 
     dfs(raiz)
 
-    print("Nodos visitados desde la raíz:", visitado)
+    # print("Nodos visitados desde la raíz:", visitado)
 
-    if not all(visitado):
+    if len(visitado) != n:
         print("❌ Árbol inválido: no todos los nodos fueron visitados")
         return False, None
 
-    print("✅ Árbol válido. Raíz:", raiz)
+    # print("✅ Árbol válido. Raíz:", raiz)
     return True, raiz
-
