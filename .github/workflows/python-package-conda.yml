@@ -19,7 +19,7 @@ jobs:
 
     - name: Install additional dependencies
       run: |
-        conda install -n myenv flake8 pytest
+        conda install -n myenv flake8 pytest pytest-cov
 
     - name: Check syntax (compilation)
       run: |
@@ -51,12 +51,13 @@ jobs:
         check_passed "tests/test_fiesta.py"
         check_passed "tests/test_subsecuencias.py"
 
-    - name: Run tests with pytest
+    - name: Run tests and generate coverage report
       env:
         PYTHONPATH: src
       run: |
-        conda run -n myenv pytest tests/
+        conda run -n myenv pytest --cov=src --cov-report=xml tests/
         if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; echo "test_fiesta: correcto"; echo "test_subsecuencias: correcto"; else echo "Errores en las pruebas"; fi
+        ls -l coverage.xml
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
@@ -67,9 +68,11 @@ jobs:
           -Dsonar.sources=src
           -Dsonar.tests=tests
           -Dsonar.python.version=3.8
+          -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.verbose=true
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
