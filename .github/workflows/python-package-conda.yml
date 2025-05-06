@@ -51,23 +51,26 @@ jobs:
         check_passed "tests/test_fiesta.py"
         check_passed "tests/test_subsecuencias.py"
 
-
     - name: Run tests with pytest
       env:
         PYTHONPATH: src
       run: |
         conda run -n myenv pytest tests/
         if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; echo "test_fiesta: correcto"; echo "test_subsecuencias: correcto"; else echo "Errores en las pruebas"; fi
+
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       with:
         args: >
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.projectKey=tu_usuario_tu_repo
+          -Dsonar.organization=tu_organizacion
           -Dsonar.sources=src
           -Dsonar.tests=tests
           -Dsonar.python.version=3.8
+          -Dsonar.verbose=true
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
