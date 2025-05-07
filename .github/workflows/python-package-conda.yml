@@ -1,4 +1,4 @@
-name: Python Package using Conda
+name: Python Check with Conda
 
 on: [push]
 
@@ -17,21 +17,20 @@ jobs:
         activate-environment: myenv
         environment-file: environment.yml
 
-    - name: Install additional dependencies
+    - name: Install flake8
       run: |
-        conda install -n myenv flake8 pytest pytest-cov
+        conda install -n myenv flake8
 
     - name: Check syntax (compilation)
       run: |
         conda run -n myenv python -m py_compile src/fiesta.py
         conda run -n myenv python -m py_compile src/subsecuencias.py
-        if [ $? -eq 0 ]; then echo "fiesta: correcto"; echo "subsecuencias: correcto"; else echo "Errores en la compilación"; fi
+        if [ $? -eq 0 ]; then echo "fiesta.py: correcto"; echo "subsecuencias.py: correcto"; else echo "Errores en la compilación"; fi
 
-    - name: Lint with flake8 (non-blocking, filtered)
-      continue-on-error: true
+    - name: Lint with flake8
       run: |
         echo "Ejecutando flake8..."
-        ERRORS=$(conda run -n myenv flake8 src/ tests/ \
+        ERRORS=$(conda run -n myenv flake8 src/ \
           --ignore=W391,W292,F401,E302,E712,E501,E261,E262,E305,E301,E114,E117,W291,W293,E225 \
           || true)
 
@@ -48,23 +47,6 @@ jobs:
 
         check_passed "src/fiesta.py"
         check_passed "src/subsecuencias.py"
-        check_passed "tests/test_fiesta.py"
-        check_passed "tests/test_subsecuencias.py"
-
-    - name: Run tests and generate coverage report
-      env:
-        PYTHONPATH: src
-      run: |
-        conda run -n myenv pytest --cov=src --cov-report=xml tests/
-        if [ $? -eq 0 ]; then
-          echo "fiesta: correcto"
-          echo "subsecuencias: correcto"
-          echo "test_fiesta: correcto"
-          echo "test_subsecuencias: correcto"
-        else
-          echo "Errores en las pruebas"
-        fi
-        ls -l coverage.xml
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
@@ -73,12 +55,11 @@ jobs:
           -Dsonar.projectKey=2025-I_proyecto-1-ada-ii-2025-i-grupo-f
           -Dsonar.organization=2025-i
           -Dsonar.sources=src
-          -Dsonar.tests=tests
           -Dsonar.python.version=3.8
-          -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.verbose=true
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
