@@ -17,9 +17,9 @@ jobs:
         activate-environment: myenv
         environment-file: environment.yml
 
-    - name: Install flake8
+    - name: Install flake8 and pytest-cov
       run: |
-        conda install -n myenv flake8
+        conda install -n myenv flake8 pytest pytest-cov
 
     - name: Check syntax (compilation)
       run: |
@@ -48,6 +48,12 @@ jobs:
         check_passed "src/fiesta.py"
         check_passed "src/subsecuencias.py"
 
+    - name: Generate coverage report
+      run: |
+        echo "Generando coverage.xml..."
+        conda run -n myenv pytest --cov=src --cov-report=xml tests/ || true
+        ls -lh coverage.xml || echo "No se generó coverage.xml"
+
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       with:
@@ -55,10 +61,13 @@ jobs:
           -Dsonar.projectKey=2025-I_proyecto-1-ada-ii-2025-i-grupo-f
           -Dsonar.organization=2025-i
           -Dsonar.sources=src
+          -Dsonar.tests=tests
           -Dsonar.python.version=3.8
+          -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.verbose=true
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
