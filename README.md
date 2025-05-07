@@ -83,7 +83,7 @@ Contiene funciones auxiliares para:
 ### `medir_tiempo.py`
 Script para medir rendimiento de los métodos **DP** y **Voraz** con entradas generadas aleatoriamente. Genera gráficas comparando la complejidad teórica con los resultados experimentales.
 
-📸 *Colocar gráfica `tiempos_vs_complejidad.png` generada en `docs/imagenes/`*
+![medir](docs/imagenes/imagen7.png)
 
 ---
 
