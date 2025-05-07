@@ -36,35 +36,37 @@ Se implementaron tres estrategias para resolver el problema:
 ### `fiesta.py`
 Archivo principal de entrada. Permite al usuario seleccionar un archivo `.txt` con los datos de entrada. Procesa todos los problemas y ejecuta los tres métodos, mostrando los resultados en consola.
 
-![Función DP](docs/imagenes/imagen1.png)
+![fiesta](docs/imagenes/imagen1.png)
+![fiesta](docs/imagenes/imagen1-1.png)
 
 ---
 
 ### `resolver.py`
 Controlador principal que llama a cada una de las estrategias y mide su tiempo de ejecución.
 
-📸 *Colocar captura del diccionario `resultado` y los `print()` de tiempos en `resolver_fiesta()` (líneas 20 a 33).*
+![resolver](docs/imagenes/imagen2.png)
 
 ---
 
 ### `dp_arbol.py`
 Implementación basada en **programación dinámica sobre árboles**. Usa recursividad y decisiones óptimas para cada nodo.
 
-📸 *Colocar captura de la función `dp()` interna y el retorno final del arreglo binario (líneas 11 a 44 aprox.)*
+![dp arbol](docs/imagenes/imagen3.png)
+![dp arbol](docs/imagenes/imagen3-1.png)
 
 ---
 
 ### `fuerza_bruta.py`
 Explora todas las combinaciones posibles de empleados y selecciona la de mayor suma válida.
 
-📸 *Colocar captura de la función `resolver_fiesta_fuerza_bruta()` completa*
+![fuerza bruta](docs/imagenes/imagen4.png)
 
 ---
 
 ### `voraz.py`
 Selecciona empleados por orden descendente de calificación, evitando conflictos con invitados anteriores.
 
-📸 *Colocar captura de la función `resolver_fiesta_voraz()` completa*
+![voraz](docs/imagenes/imagen5.png)
 
 ---
 
@@ -73,7 +75,8 @@ Contiene funciones auxiliares para:
 - Convertir la matriz de adyacencia a lista
 - Validar si la estructura es un árbol enraizado
 
-📸 *Colocar captura de la función `es_arbol_enraizado_adj()` completa*
+![utils](docs/imagenes/imagen6.png)
+![utils](docs/imagenes/imagen6-1.png)
 
 ---
 
