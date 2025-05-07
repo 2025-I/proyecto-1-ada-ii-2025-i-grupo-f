@@ -13,6 +13,7 @@ def matriz_a_lista_adyacencia(matriz):
     return adj
 
 
+
 def es_arbol_enraizado_adj(adj_list):
     n = len(adj_list)
     in_degree = [0] * n
