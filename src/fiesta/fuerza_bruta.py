@@ -15,8 +15,8 @@ def resolver_fiesta_fuerza_bruta(matriz, convivencias):
     mejor_inv = [0] * n
 
     # Revisar todos los subconjuntos posibles
-    for r in range(1, n + 1):
-        for subconjunto in combinations(range(n), r):
+    for e in range(1, n + 1):
+        for subconjunto in combinations(range(n), e):
             if es_valido(subconjunto, matriz):
                 suma = sum(convivencias[i] for i in subconjunto)
                 if suma > mejor_suma:
