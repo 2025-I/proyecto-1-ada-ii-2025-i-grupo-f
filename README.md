@@ -36,7 +36,7 @@ Se implementaron tres estrategias para resolver el problema:
 ### `fiesta.py`
 Archivo principal de entrada. Permite al usuario seleccionar un archivo `.txt` con los datos de entrada. Procesa todos los problemas y ejecuta los tres métodos, mostrando los resultados en consola.
 
-📸 *Colocar captura del bloque donde se leen y procesan los problemas en `leer_entrada_desde_archivo()` (líneas 13 a 40 aprox.)*
+![Función DP](docs/imagenes/imagen1.png)
 
 ---
 
