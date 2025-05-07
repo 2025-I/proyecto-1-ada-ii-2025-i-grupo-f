@@ -4,9 +4,9 @@
 **Profesor:** Carlos Andrés Delgado S.  
 **Fecha:** Mayo 7 2025  
 **Estudiantes:**  
-- Johan Acosta  
-- Juan Camilo Gutiérrez  
-- Andrés Felipe Rojas
+- Johan Acosta  - 2380393
+- Juan Camilo Gutiérrez - 2159874 
+- Andrés Felipe Rojas - 2160328
 
 ---
 
@@ -86,7 +86,7 @@ Contiene funciones auxiliares para:
 ### `medir_tiempo.py`
 Script para medir rendimiento de los métodos **DP** y **Voraz** con entradas generadas aleatoriamente. Genera gráficas comparando la complejidad teórica con los resultados experimentales.
 
-![medir](docs/imagenes/imagen7.png)
+![medir](docs/imagenes/imagen7.jpeg)
 
 ---
 
@@ -146,13 +146,11 @@ Se implementaron tres métodos para encontrar la subsecuencia palindrómica más
 
 Este archivo contiene los tres métodos, más una función de normalización y lectura desde archivo usando `filedialog`.
 
-📸 *Colocar captura de la función `normalizar()` y la función `subsecuencia_palindromica_mas_larga_dinamica()`*
-
-📸 *Colocar captura de `subsecuencia_palindromica_mas_larga_fuerza_bruta()`*
-
-📸 *Colocar captura de `subsecuencia_palindromica_mas_larga_voraz()`*
-
-📸 *Colocar captura de la función `procesar_archivo()` donde se imprimen los tres resultados*
+![normalizar](docs/imagenes/imagen8.png)
+![dinamica](docs/imagenes/imagen8-1.png)
+![fuerza bruta](docs/imagenes/imagen8-2.png)
+![voraz](docs/imagenes/imagen8-3.png)
+![procesar archivo](docs/imagenes/imagen8-4.png)
 
 ---
 
@@ -166,7 +164,8 @@ El archivo `test/test_subsecuencias.py` contiene pruebas automatizadas para veri
 - **Grande** (10000)
 - *(Extra grande comentado por precaución)*
 
-📸 *Colocar captura del ciclo `for nombre, n in tamanos` y de los bloques que miden tiempo para cada algoritmo*
+![test sub](docs/imagenes/imagen9.png)
+![test sub](docs/imagenes/imagen9-1.png)
 
 ---
 
