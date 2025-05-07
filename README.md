@@ -31,6 +31,9 @@ Se implementaron tres estrategias para resolver el problema:
 
 ---
 
+
+---
+
 ## 📄 Descripción de los archivos
 
 ### `fiesta.py`
@@ -87,7 +90,7 @@ Script para medir rendimiento de los métodos **DP** y **Voraz** con entradas ge
 
 ---
 
-## ✅ Pruebas
+## ✅ Pruebas (Problema 2)
 
 Se realizaron pruebas unitarias usando `unittest`, en el archivo `test_subsecuencias.py`. Las pruebas del problema 2 pueden integrarse siguiendo la misma lógica, validando que:
 
@@ -131,9 +134,55 @@ Los tiempos fueron medidos con `time.perf_counter()` y promediados en 5 ejecucio
 
 ---
 
+## 📄 Problema 1: Subsecuencias más largas de un palíndromo
+
+Se implementaron tres métodos para encontrar la subsecuencia palindrómica más larga en una cadena:
+
+- **Fuerza bruta:** explora todas las posibles subsecuencias.
+- **Programación dinámica:** utiliza subproblemas para construir la solución óptima.
+- **Voraz (pseudo-voraz):** detecta palíndromos al expandir desde el centro (más eficiente en tiempo real, pero no siempre da la subsecuencia más larga si no es continua).
+
+### `subsecuencias.py`
+
+Este archivo contiene los tres métodos, más una función de normalización y lectura desde archivo usando `filedialog`.
+
+📸 *Colocar captura de la función `normalizar()` y la función `subsecuencia_palindromica_mas_larga_dinamica()`*
+
+📸 *Colocar captura de `subsecuencia_palindromica_mas_larga_fuerza_bruta()`*
+
+📸 *Colocar captura de `subsecuencia_palindromica_mas_larga_voraz()`*
+
+📸 *Colocar captura de la función `procesar_archivo()` donde se imprimen los tres resultados*
+
+---
+
+## ✅ Pruebas (Problema 1)
+
+El archivo `test/test_subsecuencias.py` contiene pruebas automatizadas para verificar el rendimiento y la correctitud de los tres métodos. Las pruebas incluyen tamaños:
+
+- **Juguete** (10)
+- **Pequeño** (100)
+- **Mediano** (1000)
+- **Grande** (10000)
+- *(Extra grande comentado por precaución)*
+
+📸 *Colocar captura del ciclo `for nombre, n in tamanos` y de los bloques que miden tiempo para cada algoritmo*
+
+---
+
+## 📈 Complejidad estimada (Problema 1)
+
+| Método                         | Complejidad          |
+|-------------------------------|----------------------|
+| Fuerza bruta                  | O(n³)                |
+| Programación dinámica         | O(n²)                |
+| Búsqueda centro-expandida     | O(n²)                |
+
+---
+
 ## 🧾 Conclusiones
 
-- **DP en árboles** fue el método más eficiente y escalable.
-- El **método voraz** es útil para soluciones rápidas, aunque puede no ser óptimo.
-- La **fuerza bruta** es inviable para entradas grandes, pero útil para validar correctness.
+- La programación dinámica es la más confiable para obtener la solución óptima, especialmente para cadenas largas.
+- La estrategia voraz (center-expansion) es muy rápida, pero puede fallar si la subsecuencia palindrómica más larga no es continua.
+- La fuerza bruta es solo viable en tamaños muy pequeños, útil como benchmark o para validación.
 
