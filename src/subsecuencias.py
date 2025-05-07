@@ -1,85 +1,97 @@
-import re
+import tkinter as tk
+from tkinter import filedialog
 import time
-from tkinter import Tk
-from tkinter.filedialog import askopenfilename
+import re
 
-# ------------------------------------------
-# Función para normalizar una cadena:
-# Convierte todos los caracteres a minúsculas
-# y elimina cualquier carácter no alfanumérico.
-# ------------------------------------------
-def normalizar(s):
-    # Elimina todos los caracteres que no sean letras o números
-    s = re.sub(r'[^a-zA-Z0-9]', '', s)
-    # Convierte todo a minúsculas
-    return s.lower()
+# Función para normalizar la cadena (eliminar caracteres no alfanuméricos y convertir a minúsculas)
+def normalizar(cadena):
+    return ''.join(c.lower() for c in cadena if c.isalnum())
 
-# ----------------------------------------------------------------
-# Función para encontrar la subsecuencia palindrómica más larga.
-# Utiliza programación dinámica (DP) para construir una tabla dp.
-# dp[i][j] guarda la subsecuencia palindrómica más larga en s[i..j]
-# ----------------------------------------------------------------
-def subsecuencia_palindromica_mas_larga(s):
+# Método 1: Programación Dinámica
+def subsecuencia_palindromica_mas_larga_dinamica(s):
     n = len(s)
-    
-    # Crear una tabla de n x n inicializada con cadenas vacías
+    if n == 0:
+        return ''
+
     dp = [['' for _ in range(n)] for _ in range(n)]
-    
-    # Una sola letra es un palíndromo por sí misma
+
     for i in range(n):
         dp[i][i] = s[i]
-    
-    # Considerar substrings de longitud 2 hasta n
+
     for longitud in range(2, n + 1):
         for i in range(n - longitud + 1):
-            j = i + longitud - 1  # Índice final del substring
-            
-            # Si los caracteres extremos son iguales
+            j = i + longitud - 1
             if s[i] == s[j]:
-                # Si la longitud es 2, solo concatenamos los dos caracteres
                 if longitud == 2:
                     dp[i][j] = s[i] + s[j]
                 else:
-                    # Caso general: s[i] + solución interna + s[j]
                     dp[i][j] = s[i] + dp[i + 1][j - 1] + s[j]
             else:
-                # Si los extremos no coinciden, elegimos la subsecuencia más larga entre dos posibilidades
-                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1], key=lambda x: (len(x), x))
-    
-    # La solución completa está en dp[0][n-1]
-    # Verifica que se haya generado el palíndromo correcto
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1], key=len)
+
     return dp[0][n - 1]
 
+# Método 2: Fuerza Bruta
+def subsecuencia_palindromica_mas_larga_fuerza_bruta(s):
+    n = len(s)
+    max_palindrome = ''
+    
+    for i in range(n):
+        for j in range(i + 1, n + 1):
+            subseq = s[i:j]
+            if subseq == subseq[::-1] and len(subseq) > len(max_palindrome):
+                max_palindrome = subseq
+    
+    return max_palindrome
 
-# -----------------------------------------------------
-# Función principal que gestiona la lectura de archivo,
-# procesamiento de cada línea y medición de tiempo.
-# -----------------------------------------------------
-def main():
-    Tk().withdraw()  # Oculta la ventana principal de Tkinter
+# Método 3: Programación Voraz
+def subsecuencia_palindromica_mas_larga_voraz(s):
+    n = len(s)
+    max_palindrome = ""
+    
+    for i in range(n):
+        for j in range(i, n):
+            left, right = i, j
+            while left >= 0 and right < n and s[left] == s[right]:
+                if (right - left + 1) > len(max_palindrome):
+                    max_palindrome = s[left:right + 1]
+                left -= 1
+                right += 1
+    
+    return max_palindrome
 
-    # Abrimos un cuadro de diálogo para que el usuario seleccione un archivo de entrada
-    filename = askopenfilename(title="Selecciona el archivo de entrada")
+# Función para abrir un selector de archivos y leer el archivo seleccionado
+def seleccionar_archivo():
+    root = tk.Tk()
+    root.withdraw()  # Ocultar la ventana principal
+    archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.txt")])
+    return archivo
 
-    start_time = time.time()
+# Leer el archivo y procesar las cadenas
+def leer_cadenas_desde_archivo(ruta_archivo):
+    with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
+        lineas = archivo.readlines()
+        cantidad = int(lineas[0].strip())  # La primera línea es el número de cadenas
+        cadenas = [linea.strip() for linea in lineas[1:cantidad+1]]
+        return cadenas
 
-    # Abrimos el archivo y procesamos línea por línea
-    with open(filename, 'r', encoding='utf-8') as file:
-        # Leemos la primera línea: cantidad de cadenas a procesar
-        n = int(file.readline())
+def procesar_archivo(ruta_archivo):
+    cadenas = leer_cadenas_desde_archivo(ruta_archivo)
+    for cadena in cadenas:
+        normalizada = normalizar(cadena)
+        resultado_dinamica = subsecuencia_palindromica_mas_larga_dinamica(normalizada)
+        resultado_fuerza_bruta = subsecuencia_palindromica_mas_larga_fuerza_bruta(normalizada)
+        resultado_voraz = subsecuencia_palindromica_mas_larga_voraz(normalizada)
         
-        # Procesamos cada una de las n cadenas
-        for _ in range(n):
-            linea = file.readline().strip()  # Eliminamos espacios extra
-            normalizada = normalizar(linea)  # Normalizamos la cadena
-            resultado = subsecuencia_palindromica_mas_larga(normalizada)  # Calculamos subsecuencia
-            print(resultado)  # Imprimimos el resultado en salida estándar
-
-    
-    end_time = time.time()
-    
-    print(f"Tiempo total de ejecución: {end_time - start_time:.4f} segundos", file=sys.stderr)
+        print(f"Dinamica: {resultado_dinamica}")
+        print(f"Fuerza Bruta: {resultado_fuerza_bruta}")
+        print(f"Voraz: {resultado_voraz}")
 
 if __name__ == "__main__":
-    import sys
-    main()
+    archivo = seleccionar_archivo()  # Abrir el selector de archivos
+    if archivo:  # Si se seleccionó un archivo
+        procesar_archivo(archivo)
+    else:
+        print("No se seleccionó ningún archivo.")
+
+

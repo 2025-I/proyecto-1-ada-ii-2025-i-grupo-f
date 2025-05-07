@@ -175,4 +175,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Coverage
+coverage.xml
+htmlcov/
+
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,visualstudiocode,pycharm

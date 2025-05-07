@@ -64,5 +64,9 @@ def medir_y_graficar_tiempos(tamanos, repeticiones=5):
     plt.show()
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     tamanos_prueba = [100, 500,800 ,1000,1500, 2000,2500, 5000, 10000, 15000, 20000]
+=======
+    tamanos_prueba = [100, 500, 1000, 2000, 5000, 10000, 15000, 20000]
+>>>>>>> 88e34bfb0751a329c8395ebfa9a82cf99845e3f5
     medir_y_graficar_tiempos(tamanos_prueba)
