@@ -44,22 +44,31 @@ def subsecuencia_palindromica_mas_larga_fuerza_bruta(s):
     
     return max_palindrome
 
-# Método 3: Programación Voraz
+# Método 3: Voraz (Greedy)
 def subsecuencia_palindromica_mas_larga_voraz(s):
-    n = len(s)
-    max_palindrome = ""
-    
-    for i in range(n):
-        for j in range(i, n):
-            left, right = i, j
-            while left >= 0 and right < n and s[left] == s[right]:
-                if (right - left + 1) > len(max_palindrome):
-                    max_palindrome = s[left:right + 1]
-                left -= 1
-                right += 1
-    
-    return max_palindrome
+    i, j = 0, len(s) - 1
+    resultado = []
 
+    while i <= j:
+        if s[i] == s[j]:
+            resultado.append(s[i])
+            i += 1
+            j -= 1
+        elif s[i] != s[j]:
+            # Elegimos avanzar el puntero que está más lejos de encontrar un match
+            # (heurística simple: ignorar el carácter que menos probablemente forme parte del palíndromo)
+            if s.count(s[i]) < s.count(s[j]):
+                i += 1
+            else:
+                j -= 1
+
+    mitad = ''.join(resultado)
+    # Si hay un centro duplicado, lo agregamos invertido excepto si ya estamos en el medio
+    if i - j == 2:
+        return mitad + mitad[::-1]
+    else:
+        return mitad + mitad[-2::-1]
+    
 # Función para abrir un selector de archivos y leer el archivo seleccionado
 def seleccionar_archivo():
     root = tk.Tk()
