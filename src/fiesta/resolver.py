@@ -1,6 +1,5 @@
-# src/fiesta/resolver_fiesta.py
-
 # src/fiesta/resolver.py
+
 
 from .dp_arbol import resolver_fiesta_dp_arbol
 from .voraz import resolver_fiesta_voraz
@@ -12,42 +11,51 @@ def resolver_fiesta(matriz, convivencias):
     Ejecuta los tres métodos disponibles:
     - Programación dinámica en árboles (DP)
     - Voraz
-    - Fuerza bruta
+    - Fuerza bruta (solo si el tamaño es ≤ 20)
 
     Retorna:
         dict con los resultados de cada método:
         {
-            'dp': (lista_binaria, suma),
-            'voraz': (lista_binaria, suma),
-            'fuerza_bruta': (lista_binaria, suma)
+            'dp': ((lista_binaria, suma), tiempo),
+            'voraz': ((lista_binaria, suma), tiempo),
+            'fuerza_bruta': ((lista_binaria, suma), tiempo) o None si no se ejecuta
         }
-
-    como tenemos una funcion que valida si el grafo es un árbol, podemos usarla para validar
-     adj = matriz_a_lista_adyacencia(matriz)
-    es_arbol, raiz = es_arbol_enraizado_adj(adj)
-
-    if not es_arbol:
-        raise ValueError("❌ Entrada inválida: la matriz no representa un árbol enraizado")    
     """
-    # Medición DP
+
+    # DP
     start_dp = perf_counter()
     resultado_dp = resolver_fiesta_dp_arbol(matriz, convivencias)
     end_dp = perf_counter()
-    # Medición Voraz
+    tiempo_dp = end_dp - start_dp
+
+    # Voraz
     start_vz = perf_counter()
     resultado_voraz = resolver_fiesta_voraz(matriz, convivencias)
     end_vz = perf_counter()
-    # Medición Fuerza Bruta
-    start_fb = perf_counter()
-    resultado_fb = resolver_fiesta_fuerza_bruta(matriz, convivencias)
-    end_fb = perf_counter()
-     # Mostrar tiempos
+    tiempo_vz = end_vz - start_vz
+
+    # Fuerza Bruta (solo si n <= 20)
+    n = len(matriz)
+    if n <= 20:
+        start_fb = perf_counter()
+        resultado_fb = resolver_fiesta_fuerza_bruta(matriz, convivencias)
+        end_fb = perf_counter()
+        tiempo_fb = end_fb - start_fb
+    else:
+        resultado_fb = None
+        tiempo_fb = None
+
+    # Mostrar tiempos
     print("\n⏱ TIEMPOS DE EJECUCIÓN")
-    print(f"DP:           {end_dp - start_dp:.6f} s")
-    print(f"Voraz:        {end_vz - start_vz:.6f} s")
-    print(f"Fuerza bruta: {end_fb - start_fb:.6f} s")
+    print(f"DP:           {tiempo_dp:.6f} s")
+    print(f"Voraz:        {tiempo_vz:.6f} s")
+    if tiempo_fb is not None:
+        print(f"Fuerza bruta: {tiempo_fb:.6f} s")
+    else:
+        print("Fuerza bruta: NO EJECUTADO (n > 20)")
+
     return {
-        'dp': resultado_dp,
-        'voraz': resultado_voraz,
-        'fuerza_bruta': resultado_fb
+        'dp': (resultado_dp, tiempo_dp),
+        'voraz': (resultado_voraz, tiempo_vz),
+        'fuerza_bruta': (resultado_fb, tiempo_fb)
     }
