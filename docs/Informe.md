@@ -44,28 +44,29 @@ Se implementaron tres estrategias para resolver el problema:
 ## 🗂️ Estructura de carpetas
 
 PROYECTO-1-ADA-II-2025-I-GRUPO-F/
-├── .github/
-├── docs/
-│ └── imagenes/
-├── src/
-│ ├── fiesta/
-│ │ ├── dp_arbol.py
-│ │ ├── fuerza_bruta.py
-│ │ ├── medir_tiempo.py
-│ │ ├── resolver.py
-│ │ ├── utils.py
-│ │ └── voraz.py
-│ ├── fiesta.py
-│ └── subsecuencias.py
-├── tests/
-│ └── test_subsecuencias.py
-├── subsecuencias.txt
-├── requirements_dev.txt
-├── environment.yml
-├── pyproject.toml
-├── MANIFEST.in
-├── Makefile
-└── README.md
+- ├── .github/
+- ├── docs/
+- │ └── imagenes/
+- ├── src/
+- │ ├── fiesta/
+- │ │ ├── dp_arbol.py
+- │ │ ├── fuerza_bruta.py
+- │ │ ├── medir_tiempo.py
+- │ │ ├── resolver.py
+- │ │ ├── utils.py
+- │ │ └── voraz.py
+- │ ├── fiesta.py
+- │ └── subsecuencias.py
+- ├── tests/
+- │ └── test_fiesta.py
+- │ └── test_subsecuencias.py
+- ├── subsecuencias.txt
+- ├── requirements_dev.txt
+- ├── environment.yml
+- ├── pyproject.toml
+- ├── MANIFEST.in
+- ├── Makefile
+- └── README.md
 
 ---
 
@@ -74,37 +75,37 @@ PROYECTO-1-ADA-II-2025-I-GRUPO-F/
 ### `fiesta.py`
 Archivo principal de entrada. Permite al usuario seleccionar un archivo `.txt` con los datos de entrada. Procesa todos los problemas y ejecuta los tres métodos, mostrando los resultados en consola.
 
-![fiesta](docs/imagenes/imagen1.png)
-![fiesta](docs/imagenes/imagen1-1.png)
+![fiesta](imagenes/imagen1.png)
+![fiesta](imagenes/imagen1-1.png)
 
 ---
 
 ### `resolver.py`
 Controlador principal que llama a cada una de las estrategias y mide su tiempo de ejecución.
 
-![resolver](docs/imagenes/imagen2.png)
+![resolver](imagenes/imagen2.png)
 
 ---
 
 ### `dp_arbol.py`
 Implementación basada en **programación dinámica sobre árboles**. Usa recursividad y decisiones óptimas para cada nodo.
 
-![dp arbol](docs/imagenes/imagen3.png)
-![dp arbol](docs/imagenes/imagen3-1.png)
+![dp arbol](imagenes/imagen3.png)
+![dp arbol](imagenes/imagen3-1.png)
 
 ---
 
 ### `fuerza_bruta.py`
 Explora todas las combinaciones posibles de empleados y selecciona la de mayor suma válida.
 
-![fuerza bruta](docs/imagenes/imagen4.png)
+![fuerza bruta](imagenes/imagen4.png)
 
 ---
 
 ### `voraz.py`
 Selecciona empleados por orden descendente de calificación, evitando conflictos con invitados anteriores.
 
-![voraz](docs/imagenes/imagen5.png)
+![voraz](imagenes/imagen5.png)
 
 ---
 
@@ -113,15 +114,15 @@ Contiene funciones auxiliares para:
 - Convertir la matriz de adyacencia a lista
 - Validar si la estructura es un árbol enraizado
 
-![utils](docs/imagenes/imagen6.png)
-![utils](docs/imagenes/imagen6-1.png)
+![utils](imagenes/imagen6.png)
+![utils](imagenes/imagen6-1.png)
 
 ---
 
 ### `medir_tiempo.py`
 Script para medir rendimiento de los métodos **DP** y **Voraz** con entradas generadas aleatoriamente. Genera gráficas comparando la complejidad teórica con los resultados experimentales.
 
-![medir](docs/imagenes/medir.png)
+![medir](imagenes/medir.png)
 
 ---
 
@@ -141,7 +142,7 @@ Los tiempos fueron medidos con `time.perf_counter()` y promediados en 5 ejecucio
 
 - 100, 500, 1000, 2000, 5000, 10000, 15000, 20000
 
-![medir](docs/imagenes/imagen7.jpeg)
+![medir](imagenes/imagen7.jpeg)
 
 ---
 
@@ -177,11 +178,11 @@ Se implementaron tres métodos para encontrar la subsecuencia palindrómica más
 
 Este archivo contiene los tres métodos, más una función de normalización y lectura desde archivo usando `filedialog`.
 
-![normalizar](docs/imagenes/imagen8.png)
-![dinamica](docs/imagenes/imagen8-1.png)
-![fuerza bruta](docs/imagenes/imagen8-2.png)
-![voraz](docs/imagenes/imagen8-3.png)
-![procesar archivo](docs/imagenes/imagen8-4.png)
+![normalizar](imagenes/imagen8.png)
+![dinamica](imagenes/imagen8-1.png)
+![fuerza bruta](imagenes/imagen8-2.png)
+![voraz](imagenes/imagen8-3.png)
+![procesar archivo](imagenes/imagen8-4.png)
 
 ---
 
@@ -195,8 +196,8 @@ El archivo `test/test_subsecuencias.py` contiene pruebas automatizadas para veri
 - **Grande** (10000)
 - *(Extra grande comentado por precaución)*
 
-![test sub](docs/imagenes/imagen9.png)
-![test sub](docs/imagenes/imagen9-1.png)
+![test sub](imagenes/imagen9.png)
+![test sub](imagenes/imagen9-1.png)
 
 ---
 
