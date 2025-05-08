@@ -42,9 +42,15 @@ def leer_entrada_desde_archivo(file_path):
 
         soluciones = resolver_fiesta(matriz, convivencias)
 
-        for metodo, (invitados, suma) in soluciones.items():
-            resultado_linea = f"{metodo.upper()}: " + " ".join(map(str, invitados)) + f" {suma}"
+        for metodo, (resultado, tiempo) in soluciones.items():
+            if resultado is None:
+                resultado_linea = f"{metodo.upper()}: NO EJECUTADO"
+            else:
+                invitados, suma = resultado
+                resultado_linea = f"{metodo.upper()}: " + " ".join(map(str, invitados)) + f" {suma}"
             resultados.append(resultado_linea)
+
+
 
         resultados.append("")  # Línea vacía entre problemas
 
