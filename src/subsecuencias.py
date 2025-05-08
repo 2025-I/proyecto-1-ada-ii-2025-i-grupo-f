@@ -36,13 +36,12 @@ def subsecuencia_palindromica_mas_larga_fuerza_bruta(s):
     n = len(s)
     max_palindrome = ''
     
-    # Probar todas las combinaciones posibles de índices
-    for r in range(1, n + 1):
-        for indices in combinations(range(n), r):
-            subseq = ''.join(s[i] for i in indices)
+    for i in range(n):
+        for j in range(i + 1, n + 1):
+            subseq = s[i:j]
             if subseq == subseq[::-1] and len(subseq) > len(max_palindrome):
                 max_palindrome = subseq
-
+    
     return max_palindrome
 
 # Método 3: Programación Voraz
@@ -94,5 +93,4 @@ if __name__ == "__main__":
         procesar_archivo(archivo)
     else:
         print("No se seleccionó ningún archivo.")
-
 
