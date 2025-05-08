@@ -1,105 +1,146 @@
 import tkinter as tk
 from tkinter import filedialog
-import time
-import re
 
-# Función para normalizar la cadena (eliminar caracteres no alfanuméricos y convertir a minúsculas)
-def normalizar(cadena):
-    return ''.join(c.lower() for c in cadena if c.isalnum())
 
-# Método 1: Programación Dinámica
+def normalizar(s):
+    return ''.join(c.lower() for c in s if c.isalnum())
+
+
 def subsecuencia_palindromica_mas_larga_dinamica(s):
-    n = len(s)
+    normalized = normalizar(s)
+    n = len(normalized)
     if n == 0:
-        return ''
+        return ""
 
-    dp = [['' for _ in range(n)] for _ in range(n)]
-
+    dp = [[0] * n for _ in range(n)]
     for i in range(n):
-        dp[i][i] = s[i]
+        dp[i][i] = 1
 
-    for longitud in range(2, n + 1):
-        for i in range(n - longitud + 1):
-            j = i + longitud - 1
-            if s[i] == s[j]:
-                if longitud == 2:
-                    dp[i][j] = s[i] + s[j]
-                else:
-                    dp[i][j] = s[i] + dp[i + 1][j - 1] + s[j]
-            else:
-                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1], key=len)
+    start = 0
+    max_length = 1
 
-    return dp[0][n - 1]
+    for i in range(n - 1):
+        if normalized[i] == normalized[i + 1]:
+            dp[i][i + 1] = 2
+            start = i
+            max_length = 2
 
-# Método 2: Fuerza Bruta
-def subsecuencia_palindromica_mas_larga_fuerza_bruta(s):
-    n = len(s)
-    max_palindrome = ''
-    
-    for i in range(n):
-        for j in range(i + 1, n + 1):
-            subseq = s[i:j]
-            if subseq == subseq[::-1] and len(subseq) > len(max_palindrome):
-                max_palindrome = subseq
-    
-    return max_palindrome
+    for length in range(3, n + 1):
+        for i in range(n - length + 1):
+            j = i + length - 1
+            if normalized[i] == normalized[j] and dp[i + 1][j - 1] > 0:
+                dp[i][j] = dp[i + 1][j - 1] + 2
+                if dp[i][j] > max_length:
+                    max_length = dp[i][j]
+                    start = i
 
-# Método 3: Voraz (Greedy)
-def subsecuencia_palindromica_mas_larga_voraz(s):
-    i, j = 0, len(s) - 1
-    resultado = []
-
+    result = ""
+    i, j = start, start + max_length - 1
     while i <= j:
-        if s[i] == s[j]:
-            resultado.append(s[i])
+        if i == j:
+            result += normalized[i]
+            break
+        elif normalized[i] == normalized[j]:
+            result += normalized[i]
             i += 1
             j -= 1
-        elif s[i] != s[j]:
-            # Elegimos avanzar el puntero que está más lejos de encontrar un match
-            # (heurística simple: ignorar el carácter que menos probablemente forme parte del palíndromo)
-            if s.count(s[i]) < s.count(s[j]):
+        else:
+            if dp[i + 1][j] > dp[i][j - 1]:
                 i += 1
             else:
                 j -= 1
 
-    mitad = ''.join(resultado)
-    # Si hay un centro duplicado, lo agregamos invertido excepto si ya estamos en el medio
-    if i - j == 2:
-        return mitad + mitad[::-1]
+    if max_length > 1:
+        if max_length % 2 == 0:
+            result = result + result[::-1]
+        else:
+            result = result + result[:-1][::-1]
+
+    return result
+
+
+def subsecuencia_palindromica_mas_larga_fuerza_bruta(s):
+    normalized = normalizar(s)
+    n = len(normalized)
+    max_palindromic_subsequence = ""
+
+    def generate(index, current):
+        nonlocal max_palindromic_subsequence
+        if index == n:
+            if current == current[::-1] and len(current) > len(max_palindromic_subsequence):
+                max_palindromic_subsequence = current
+            return
+        generate(index + 1, current + normalized[index])
+        generate(index + 1, current)
+
+    if n <= 15:
+        generate(0, "")
+        return max_palindromic_subsequence
     else:
-        return mitad + mitad[-2::-1]
-    
-# Función para abrir un selector de archivos y leer el archivo seleccionado
-def seleccionar_archivo():
-    root = tk.Tk()
-    root.withdraw()  # Ocultar la ventana principal
-    archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Archivos de texto", "*.txt")])
-    return archivo
+        return subsecuencia_palindromica_mas_larga_dinamica(s)
 
-# Leer el archivo y procesar las cadenas
-def leer_cadenas_desde_archivo(ruta_archivo):
-    with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
-        lineas = archivo.readlines()
-        cantidad = int(lineas[0].strip())  # La primera línea es el número de cadenas
-        cadenas = [linea.strip() for linea in lineas[1:cantidad+1]]
-        return cadenas
 
-def procesar_archivo(ruta_archivo):
-    cadenas = leer_cadenas_desde_archivo(ruta_archivo)
-    for cadena in cadenas:
-        normalizada = normalizar(cadena)
-        resultado_dinamica = subsecuencia_palindromica_mas_larga_dinamica(normalizada)
-        resultado_fuerza_bruta = subsecuencia_palindromica_mas_larga_fuerza_bruta(normalizada)
-        resultado_voraz = subsecuencia_palindromica_mas_larga_voraz(normalizada)
-        
-        print(f"Dinamica: {resultado_dinamica}")
-        print(f"Fuerza Bruta: {resultado_fuerza_bruta}")
-        print(f"Voraz: {resultado_voraz}")
+def subsecuencia_palindromica_mas_larga_voraz(s):
+    """
+    Busca subcadenas palindrómicas de forma expansiva desde el centro.
+    No es adecuado para subsecuencias separadas.
+    """
+    normalized = normalizar(s)
+    n = len(normalized)
+    best_palindrome = ""
+
+    def expand(center_left, center_right):
+        while center_left >= 0 and center_right < n and normalized[center_left] == normalized[center_right]:
+            center_left -= 1
+            center_right += 1
+        return normalized[center_left + 1:center_right]
+
+    for i in range(n):
+        # Impares
+        p1 = expand(i, i)
+        # Pares
+        p2 = expand(i, i + 1)
+        best_palindrome = max(best_palindrome, p1, p2, key=len)
+
+    return best_palindrome
+
+
+def process_input_file(file_content):
+    lines = file_content.strip().split('\n')
+    n = int(lines[0])
+    results = []
+
+    for i in range(1, n + 1):
+        cadena = lines[i]
+        dp_res = subsecuencia_palindromica_mas_larga_dinamica(cadena)
+        fb_res = subsecuencia_palindromica_mas_larga_fuerza_bruta(cadena)
+        gz_res = subsecuencia_palindromica_mas_larga_voraz(cadena)
+        results.append((dp_res, fb_res, gz_res))
+
+    return results
+
 
 if __name__ == "__main__":
-    archivo = seleccionar_archivo()  # Abrir el selector de archivos
-    if archivo:  # Si se seleccionó un archivo
-        procesar_archivo(archivo)
-    else:
-        print("No se seleccionó ningún archivo.")
+    root = tk.Tk()
+    root.withdraw()
 
+    archivo = filedialog.askopenfilename(
+        title="Selecciona el archivo de entrada",
+        filetypes=[("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")]
+    )
+
+    if not archivo:
+        print("No se seleccionó ningún archivo.")
+        exit()
+
+    with open(archivo, "r", encoding="utf-8") as f:
+        contenido = f.read()
+
+    resultados = process_input_file(contenido)
+
+    for idx, (dp, fb, gz) in enumerate(resultados, 1):
+        print(f"Cadena {idx}:")
+        print(f"  DP: {dp}")
+        print(f"  FB: {fb}")
+        print(f"  GZ: {gz}")
+        print()
